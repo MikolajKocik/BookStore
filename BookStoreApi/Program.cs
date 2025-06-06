@@ -3,6 +3,7 @@ using BookStoreApi.Slices.Books.CreateBook;
 using BookStoreApi.Slices.Books.DeleteBook;
 using BookStoreApi.Slices.Books.GetBook;
 using BookStoreApi.Slices.Books.UpdateBook;
+using BookStoreApi.Slices.Reviews.CreateReview;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,6 +39,9 @@ app.MapCreateBookEndpoint();
 app.MapGetBookEndpoint();
 app.MapUpdateBookEndpoint(); 
 app.MapDeleteBookEndpoint();
+
+// endpoints-review
+app.MapCreateReviewEndpoint();
 
 // middleware 
 //app.UseMiddleware<GlobalExceptionMiddleware>();

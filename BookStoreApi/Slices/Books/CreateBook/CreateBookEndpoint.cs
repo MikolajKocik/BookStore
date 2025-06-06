@@ -1,4 +1,5 @@
 ﻿using BookStoreApi.Data;
+using BookStoreApi.Models;
 using FluentValidation;
 
 namespace BookStoreApi.Slices.Books.CreateBook
@@ -17,7 +18,7 @@ namespace BookStoreApi.Slices.Books.CreateBook
                 }
 
                 // create entity
-                var book = new Models.Book
+                var book = new Book
                 {
                     Id = Guid.NewGuid(),
                     Title = request.Title,
