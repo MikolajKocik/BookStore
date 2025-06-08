@@ -1,0 +1,1 @@
+minimalAPi - slice architecture
