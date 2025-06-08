@@ -5,6 +5,8 @@ using BookStoreApi.Slices.Books.GetBook;
 using BookStoreApi.Slices.Books.UpdateBook;
 using BookStoreApi.Slices.Reviews.CreateReview;
 using BookStoreApi.Slices.Reviews.GetReviews;
+using BookStoreApi.Slices.Users.Login;
+using BookStoreApi.Slices.Users.Register;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -55,6 +57,10 @@ app.MapDeleteBookEndpoint();
 // endpoints-review
 app.MapCreateReviewEndpoint();
 app.MapGetReviewsEndopint();
+
+// endpoints-auth
+app.MapLoginEndpoint();
+app.MapRegisterEndpoint();
 
 // middleware 
 //app.UseMiddleware<GlobalExceptionMiddleware>();
