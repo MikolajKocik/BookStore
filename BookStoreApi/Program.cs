@@ -3,6 +3,7 @@ using BookStoreApi.Slices.Books.CreateBook;
 using BookStoreApi.Slices.Books.DeleteBook;
 using BookStoreApi.Slices.Books.GetBook;
 using BookStoreApi.Slices.Books.UpdateBook;
+using BookStoreApi.Slices.Books.UploadCoverImage;
 using BookStoreApi.Slices.Reviews.CreateReview;
 using BookStoreApi.Slices.Reviews.GetReviews;
 using BookStoreApi.Slices.Users.Login;
@@ -54,6 +55,9 @@ app.MapGetBookEndpoint();
 app.MapUpdateBookEndpoint(); 
 app.MapDeleteBookEndpoint();
 
+// endpoint-coverImage
+app.MapUploadCoverImageEndpoint();
+
 // endpoints-review
 app.MapCreateReviewEndpoint();
 app.MapGetReviewsEndopint();
@@ -71,6 +75,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
