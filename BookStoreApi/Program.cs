@@ -4,8 +4,11 @@ using BookStoreApi.Slices.Books.DeleteBook;
 using BookStoreApi.Slices.Books.GetBook;
 using BookStoreApi.Slices.Books.UpdateBook;
 using BookStoreApi.Slices.Reviews.CreateReview;
+using BookStoreApi.Slices.Reviews.GetReviews;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,10 +25,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // JWT bearer
-builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
 {
-    options.RequireHttpsMetadata = false;
-    options.SaveToken = false;
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = "BookStoreApi",
+        ValidateAudience = true,
+        ValidAudience = "BookStoreApi",
+        ValidateLifetime = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secret_password_jwt")),
+        ValidateIssuerSigningKey = true
+    };
 });
 
 // Add services to the container.
@@ -42,6 +54,7 @@ app.MapDeleteBookEndpoint();
 
 // endpoints-review
 app.MapCreateReviewEndpoint();
+app.MapGetReviewsEndopint();
 
 // middleware 
 //app.UseMiddleware<GlobalExceptionMiddleware>();
@@ -56,7 +69,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
-//app.UseAuthorization();
+app.UseAuthorization();
 
 app.Run();
 
