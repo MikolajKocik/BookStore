@@ -6,7 +6,9 @@ using BookStoreApi.Slices.Books.GetBooks;
 using BookStoreApi.Slices.Books.UpdateBook;
 using BookStoreApi.Slices.Books.UploadCoverImage;
 using BookStoreApi.Slices.Reviews.CreateReview;
+using BookStoreApi.Slices.Reviews.DeleteReview;
 using BookStoreApi.Slices.Reviews.GetReviews;
+using BookStoreApi.Slices.Reviews.UpdateReview;
 using BookStoreApi.Slices.Users.Login;
 using BookStoreApi.Slices.Users.Register;
 using FluentValidation;
@@ -63,6 +65,8 @@ app.MapUploadCoverImageEndpoint();
 // endpoints-review
 app.MapCreateReviewEndpoint();
 app.MapGetReviewsEndopint();
+app.MapUpdateReviewEndpoint();
+app.MapDeleteReviewEndpoint();
 
 // endpoints-auth
 app.MapLoginEndpoint();
