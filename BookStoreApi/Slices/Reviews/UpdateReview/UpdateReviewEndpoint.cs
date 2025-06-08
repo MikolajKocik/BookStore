@@ -8,7 +8,7 @@ namespace BookStoreApi.Slices.Reviews.UpdateReview
     {
         public static void MapUpdateReviewEndpoint(this WebApplication app)
         {
-            app.MapPut("/api/reviews/{guid:id}", async (Guid id, UpdateReviewRequest request, AppDbContext context, IValidator<UpdateReviewRequest> validator) =>
+            app.MapPut("/api/reviews/{id:guid}", async (Guid id, UpdateReviewRequest request, AppDbContext context, IValidator<UpdateReviewRequest> validator) =>
             {
                 // validation 
                 var validationResult = await validator.ValidateAsync(request);

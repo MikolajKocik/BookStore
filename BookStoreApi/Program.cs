@@ -46,6 +46,8 @@ builder.Services.AddAuthentication("Bearer")
     };
 });
 
+builder.Services.AddAuthorization();
+
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
