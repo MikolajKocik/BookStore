@@ -2,6 +2,7 @@ using BookStoreApi.Data;
 using BookStoreApi.Slices.Books.CreateBook;
 using BookStoreApi.Slices.Books.DeleteBook;
 using BookStoreApi.Slices.Books.GetBook;
+using BookStoreApi.Slices.Books.GetBooks;
 using BookStoreApi.Slices.Books.UpdateBook;
 using BookStoreApi.Slices.Books.UploadCoverImage;
 using BookStoreApi.Slices.Reviews.CreateReview;
@@ -31,7 +32,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
 {
-    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
         ValidIssuer = "BookStoreApi",
@@ -52,6 +53,7 @@ var app = builder.Build();
 // endpoints-book
 app.MapCreateBookEndpoint();
 app.MapGetBookEndpoint();
+app.MapGetBooksEndpoint();
 app.MapUpdateBookEndpoint(); 
 app.MapDeleteBookEndpoint();
 
