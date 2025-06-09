@@ -33,6 +33,10 @@ builder.Host.UseSerilog((context, logger) => logger
     .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
     .MinimumLevel.Debug());
 
+// HealthCheck
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection")!);
+
 //db init
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -113,6 +117,9 @@ app.UseCors(policy =>
     policy.WithOrigins(allowedOrigins!)
     .AllowAnyHeader()
     .AllowAnyMethod());
+
+// endpoint-healhcheck
+app.MapHealthChecks("/health");
 
 // endpoints-book
 app.MapCreateBookEndpoint();
