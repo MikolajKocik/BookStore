@@ -1,4 +1,5 @@
 using BookStoreApi.Data;
+using BookStoreApi.Middleware;
 using BookStoreApi.Slices.Books.CreateBook;
 using BookStoreApi.Slices.Books.DeleteBook;
 using BookStoreApi.Slices.Books.GetBook;
@@ -75,7 +76,7 @@ app.MapLoginEndpoint();
 app.MapRegisterEndpoint();
 
 // middleware 
-//app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
