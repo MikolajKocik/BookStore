@@ -74,7 +74,19 @@ builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// cors
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+
+builder.Services.AddCors();
+
+// ==========================================================
+
 var app = builder.Build();
+
+app.UseCors(policy =>
+    policy.WithOrigins(allowedOrigins!)
+    .AllowAnyHeader()
+    .AllowAnyMethod());
 
 // endpoints-book
 app.MapCreateBookEndpoint();
