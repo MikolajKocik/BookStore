@@ -12,7 +12,7 @@ namespace BookStoreApi.Slices.Users.Login
     {
         public static void MapLoginEndpoint(this WebApplication app)
         {
-            app.MapPost("/api/users/login", async (LoginRequest request, AppDbContext context, IValidator<LoginRequest> validator) =>
+            app.MapPost("/api/users/login", async (LoginRequest request, AppDbContext context, IValidator<LoginRequest> validator, IConfiguration configuration) =>
             {
                 // validation
                 var validationResult = validator.Validate(request);
@@ -43,13 +43,19 @@ namespace BookStoreApi.Slices.Users.Login
                     new Claim(ClaimTypes.Role, "Admin")
                 };
 
+                // from appsettings
+                var jwtSettings = configuration.GetSection("Jwt");
+                var secretKey = jwtSettings["Key"];
+                var issuer = jwtSettings["Issuer"];
+                var audience = jwtSettings["Audience"];
+
                 // key / credentials / token
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secret_password_jwt"));
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
                 var token = new JwtSecurityToken(
-                    issuer: "BookStoreApi",
-                    audience: "BookStoreApi",
+                    issuer: issuer,
+                    audience: audience,
                     claims: claims,
                     expires: DateTime.UtcNow.AddHours(1),
                     signingCredentials: creds

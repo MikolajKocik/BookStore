@@ -19,6 +19,13 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// user secrets + appsettings also environement variable config
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddUserSecrets<Program>()
+    .AddEnvironmentVariables();
+
 //db init
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -32,17 +39,23 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // JWT bearer
+var jwtSettings = builder.Configuration.GetSection("Jwt"); // from apssettings.json
+var secretKey = jwtSettings["Key"];
+var issuer = jwtSettings["Issuer"];
+var audience = jwtSettings["Audience"];
+
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
-        ValidIssuer = "BookStoreApi",
+        ValidIssuer = issuer,
         ValidateAudience = true,
-        ValidAudience = "BookStoreApi",
+        ValidAudience = audience,
         ValidateLifetime = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secret_password_jwt")),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey ??
+            throw new ArgumentException("Jwt key not found"))),
         ValidateIssuerSigningKey = true
     };
 });
