@@ -15,6 +15,7 @@ using BookStoreApi.Slices.Users.Register;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,11 +27,18 @@ builder.Configuration
     .AddUserSecrets<Program>()
     .AddEnvironmentVariables();
 
-//db init
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// serilog
+builder.Host.UseSerilog((context, logger) => logger
+    .WriteTo.Console()
+    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
+    .MinimumLevel.Debug());
 
-builder.Services.AddDbContext<AppDbContext>(options
-    => options.UseNpgsql(connectionString));
+//db init
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.EnableSensitiveDataLogging();
+});
 
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
