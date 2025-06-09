@@ -58,7 +58,7 @@ builder.Services.AddSwaggerGen(options =>
 
     options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
     {
-        {
+        { // key , value -> dictionary
             new Microsoft.OpenApi.Models.OpenApiSecurityScheme
             {
                 Reference = new Microsoft.OpenApi.Models.OpenApiReference
