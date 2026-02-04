@@ -1,4 +1,4 @@
-# BookStore API
+# BookStore minimal API
 
 A minimal bookstore API project built with C# (.NET), mainly to demonstrate the **slice architecture** approach and MinimalAPI usage.
 
