@@ -1,4 +1,9 @@
 using BookStoreApi.Data;
+using BookStoreApi.Slices.Cart.AddCartItem;
+using BookStoreApi.Slices.Cart.ClearCart;
+using BookStoreApi.Slices.Cart.GetCart;
+using BookStoreApi.Slices.Cart.RemoveCartItem;
+using BookStoreApi.Slices.Cart.UpdateCartItem;
 using BookStoreApi.Middleware;
 using BookStoreApi.Slices.Books.CreateBook;
 using BookStoreApi.Slices.Books.DeleteBook;
@@ -13,6 +18,7 @@ using BookStoreApi.Slices.Reviews.UpdateReview;
 using BookStoreApi.Slices.Users.Login;
 using BookStoreApi.Slices.Users.Register;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
@@ -100,23 +106,36 @@ builder.Services.AddAuthentication("Bearer")
 
 builder.Services.AddAuthorization();
 
-// Add services to the container.
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 // cors
-var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
 
 builder.Services.AddCors();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.IdleTimeout = TimeSpan.FromHours(2);
+});
 
 // ==========================================================
 
 var app = builder.Build();
 
 app.UseCors(policy =>
-    policy.WithOrigins(allowedOrigins!)
-    .AllowAnyHeader()
-    .AllowAnyMethod());
+{
+    if (allowedOrigins.Length == 0)
+    {
+        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        return;
+    }
+
+    policy.WithOrigins(allowedOrigins)
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+});
 
 // endpoint-healhcheck
 app.MapHealthChecks("/health");
@@ -141,6 +160,13 @@ app.MapDeleteReviewEndpoint();
 app.MapLoginEndpoint();
 app.MapRegisterEndpoint();
 
+// endpoints-cart
+app.MapGetCartEndpoint();
+app.MapAddCartItemEndpoint();
+app.MapUpdateCartItemEndpoint();
+app.MapRemoveCartItemEndpoint();
+app.MapClearCartEndpoint();
+
 // middleware 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
@@ -152,6 +178,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
+
+app.UseSession();
 
 app.UseHttpsRedirection();
 

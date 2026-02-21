@@ -1,5 +1,6 @@
 ﻿using BookStoreApi.Data;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -29,15 +30,22 @@ namespace BookStoreApi.Slices.Users.Login
                     return Results.NotFound("User not found");
                 }
 
-                // check password 
-                if(user.PasswordHash != request.Password)
+                // check password
+                var hasher = new PasswordHasher<Models.User>();
+                var verificationResult = hasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
+                var passwordMatches = verificationResult == PasswordVerificationResult.Success
+                    || verificationResult == PasswordVerificationResult.SuccessRehashNeeded
+                    // fallback for legacy plain-text seeded accounts
+                    || user.PasswordHash == request.Password;
+
+                if(!passwordMatches)
                 {
                     return Results.Unauthorized();
                 }
 
                 // create token JWT
                 var claims = new[]
-                {              
+                {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(ClaimTypes.Role, "Admin")
@@ -64,7 +72,7 @@ namespace BookStoreApi.Slices.Users.Login
                 // token string
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-                return Results.Ok(new {  Token = tokenString });
+                return Results.Ok(new { token = tokenString, Token = tokenString });
             });
         }
     }

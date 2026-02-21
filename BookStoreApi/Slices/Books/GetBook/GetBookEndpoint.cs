@@ -26,6 +26,7 @@ namespace BookStoreApi.Slices.Books.GetBook
                     Title = book.Title,
                     Author = book.Author,
                     Price = book.Price,
+                    CoverImagePath = book.CoverImagePath,
                     Reviews = book.Reviews.Select(r => new GetBookResponse.ReviewDto
                     {
                         Id = r.Id,

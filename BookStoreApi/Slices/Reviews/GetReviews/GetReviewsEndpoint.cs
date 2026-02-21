@@ -7,7 +7,7 @@ namespace BookStoreApi.Slices.Reviews.GetReviews
     {
         public static void MapGetReviewsEndopint(this WebApplication app)
         {
-            app.MapPost("/api/books/{bookId:guid}/reviews", async (Guid bookId, AppDbContext context) =>
+            app.MapGet("/api/books/{bookId:guid}/reviews", async (Guid bookId, AppDbContext context) =>
             {
                 var bookExists = await context.Books.AnyAsync(x => x.Id == bookId);
                 if(!bookExists)
