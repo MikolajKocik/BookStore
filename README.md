@@ -4,7 +4,7 @@ A minimal bookstore API project built with C# (.NET), mainly to demonstrate the 
 
 ## Architecture
 
-This project uses **slice architecture** – the codebase is divided into independent modules (slices), each with its own endpoints for specific features (books, reviews, users).  
+This project uses **slice architecture** – the codebase is divided into independent modules (slices), each with its own endpoints for specific features (books, reviews, users, session cart).  
 Every slice contains its own files for CRUD logic, validation, and business rules.
 
 ## Features
