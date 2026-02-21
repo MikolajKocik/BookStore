@@ -11,6 +11,7 @@ Every slice contains its own files for CRUD logic, validation, and business rule
 
 - CRUD for books (create, update, delete, get)
 - CRUD for book reviews
+- Session-based cart endpoints (`/api/cart`) for adding/removing/updating items
 - Simple user login and registration (JWT Auth)
 - Data validation (FluentValidation)
 - Swagger (automatic API documentation)

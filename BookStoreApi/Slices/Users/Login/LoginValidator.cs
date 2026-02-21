@@ -9,8 +9,8 @@ namespace BookStoreApi.Slices.Users.Login
         {
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage("Password is required")
-                .Matches(@"^(?=.*[A-Z])(?=.*\d).{8,}$")
-                .WithMessage("Password must be at least 8 characters, with 1 uppercase letter and 1 number.");
+                .MinimumLength(6)
+                .WithMessage("Password must be at least 6 characters.");
 
             RuleFor(x => x.UserName)
                 .NotEmpty().WithMessage("Username is required")

@@ -23,7 +23,8 @@ namespace BookStoreApi.Slices.Books.CreateBook
                     Id = Guid.NewGuid(),
                     Title = request.Title,
                     Author = request.Author,
-                    Price = request.Price
+                    Price = request.Price,
+                    CoverImagePath = string.Empty
                 };
 
                 context.Books.Add(book);

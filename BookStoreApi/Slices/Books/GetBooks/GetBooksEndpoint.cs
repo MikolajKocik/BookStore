@@ -26,29 +26,29 @@ namespace BookStoreApi.Slices.Books.GetBooks
 
                 if(!string.IsNullOrWhiteSpace(author))
                 {
-                    query.Where(b => b.Author.Contains(author));
+                    query = query.Where(b => b.Author.Contains(author));
                 }
                 
                 if(!string.IsNullOrWhiteSpace(title))
                 {
-                    query.Where(b => b.Title.Contains(title));
+                    query = query.Where(b => b.Title.Contains(title));
                 }
 
                 if(minPrice.HasValue)
                 {
-                    query.Where(b => b.Price >= minPrice.Value);
+                    query = query.Where(b => b.Price >= minPrice.Value);
                 }
 
                 if(maxPrice.HasValue)
                 {
-                    query.Where(b => b.Price <= maxPrice.Value);
+                    query = query.Where(b => b.Price <= maxPrice.Value);
                 }
 
                 // count books
-                var totalCount = context.Books.CountAsync();
+                var totalCount = await query.CountAsync();
 
                 // pagination
-                var books = await context.Books
+                var books = await query
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
